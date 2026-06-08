@@ -1,0 +1,9 @@
+{
+  "expo": {
+    "name": "Rural Health AI",
+    "slug": "rural-health-ai-mobile",
+    "version": "1.0.0",
+    "platforms": ["ios", "android", "web"],
+    "sdkVersion": "56.0.0"
+  }
+}

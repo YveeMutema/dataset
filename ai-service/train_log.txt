@@ -1,0 +1,32 @@
+Validation warnings for train dataset:
+Dataset entry for Allergy should include cough.
+Dataset entry for Allergy should include skin_rash.
+Dataset entry for Allergy should include headache.
+Dataset entry for Gastroenteritis should include weakness_in_limbs.
+Dataset entry for Gastroenteritis should include vomiting.
+Dataset entry for Gastroenteritis should include diarrhoea.
+Dataset entry for Malaria should include chills.
+Dataset entry for Malaria should include high_fever.
+Dataset entry for Malaria should include headache.
+Dataset entry for Dengue should include weakness_in_limbs.
+Dataset entry for Dengue should include high_fever.
+Dataset entry for Typhoid should include weakness_in_limbs.
+Dataset entry for Typhoid should include vomiting.
+Dataset entry for Pneumonia should include cough.
+Dataset entry for Pneumonia should include breathlessness.
+Validation warnings for test dataset:
+Dataset entry for Allergy should include cough.
+Dataset entry for Allergy should include skin_rash.
+Dataset entry for Allergy should include headache.
+Dataset entry for Gastroenteritis should include weakness_in_limbs.
+Dataset entry for Dengue should include weakness_in_limbs.
+Dataset entry for Typhoid should include weakness_in_limbs.
+Training J48 decision tree...
+WARNING: core mtj jar files are not available as resources to this classloader (jdk.internal.loader.ClassLoaders$AppClassLoader@11a4022a)
+J48 accuracy: train=100.00% test=97.62%
+
+Training Random Forest ensemble...
+RandomForest accuracy: train=100.00% test=100.00%
+
+RandomForest 10-fold CV accuracy: 100.00%
+Saved trained model to data/model.bin

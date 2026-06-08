@@ -1,0 +1,24 @@
+# Enforce LF in the repository and allow CRLF on checkout for Windows users
+* text=auto
+
+# Keep JSON, JS, and config files normalized to LF
+*.json text
+*.js text
+*.jsx text
+*.ts text
+*.tsx text
+*.css text
+*.md text
+*.yml text
+*.yaml text
+*.env text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.jar binary
+*.class binary

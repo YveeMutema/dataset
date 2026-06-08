@@ -1,0 +1,20 @@
+/Testing.csv
+/Training.csv
+
+# Local environment files
+.env
+
+# Node dependencies
+/backend/node_modules/
+/mobile/node_modules/
+
+# Java build output
+/ai-service/target/
+/ai-service/*.class
+/ai-service/*.jar
+/ai-service/*.log
+
+# Expo and web build cache
+/mobile/.expo/
+/mobile/web-build/
+/mobile/dist/

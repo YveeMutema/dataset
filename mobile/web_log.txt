@@ -1,0 +1,10 @@
+
+> rural-health-ai-mobile@1.0.0 web
+> expo start --web
+
+Starting project at C:\Users\yeukai mutemachimwe\Downloads\dataset\mobile
+› Port 8081 is being used by another process
+Input is required, but 'npx expo' is in non-interactive mode.
+Required input:
+> Use port 8083 instead?
+› Skipping dev server
