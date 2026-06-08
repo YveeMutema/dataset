@@ -11,7 +11,10 @@ const getBaseUrl = () => {
 };
 
 const BASE_URL = getBaseUrl();
-const authHeaders = (token) => ({ headers: { Authorization: `Bearer ${token}` } });
+const authHeaders = (token) => {
+  if (!token) return {};
+  return { headers: { Authorization: `Bearer ${token}` } };
+};
 
 export const register = (data) => axios.post(`${BASE_URL}/auth/register`, data);
 export const login = (data) => axios.post(`${BASE_URL}/auth/login`, data);

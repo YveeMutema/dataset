@@ -34,8 +34,9 @@ const extractJson = (text) => {
 };
 
 exports.predictSymptoms = async (symptoms, customSymptoms = []) => {
+  // If no OpenAI key configured, use local Java predictor
   if (!OPENAI_API_KEY) {
-    return predictSymptomsViaJava(symptoms);
+    return predictSymptomsViaJava(symptoms, customSymptoms);
   }
 
   const symptomDescription = buildSymptomDescription(symptoms, customSymptoms);
@@ -48,54 +49,46 @@ Return only valid JSON without any extra commentary. The JSON must include these
 - risk (low, medium, or high)
 - advice (string)
 - topPredictions (array of objects with disease and confidence)
-- explanation (string)
+- explanation (string)`;
 
-Example:
-{
-  "disease": "Malaria",
-  "confidence": 87,
-  "risk": "high",
-  "advice": "Seek medical care immediately, rest, drink clean water, and avoid self-medicating with unknown tablets.",
-  "topPredictions": [
-    { "disease": "Malaria", "confidence": 87 },
-    { "disease": "Typhoid", "confidence": 65 },
-    { "disease": "Urinary tract infection", "confidence": 40 }
-  ],
-  "explanation": "The symptom set best matches malaria because of fever, chills, and body weakness in a rural tropical area."
-}`;
-
-  const response = await axios.post(
-    OPENAI_URL,
-    {
-      model: 'gpt-3.5-turbo',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt }
-      ],
-      temperature: 0.2,
-      max_tokens: 400
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
-        'Content-Type': 'application/json'
+  try {
+    const response = await axios.post(
+      OPENAI_URL,
+      {
+        model: 'gpt-3.5-turbo',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt }
+        ],
+        temperature: 0.2,
+        max_tokens: 400
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
       }
+    );
+
+    const rawText = response.data?.choices?.[0]?.message?.content || '';
+    const parsed = extractJson(rawText);
+
+    if (!parsed) {
+      throw new Error('Unable to parse AI response from OpenAI.');
     }
-  );
 
-  const rawText = response.data?.choices?.[0]?.message?.content || '';
-  const parsed = extractJson(rawText);
-
-  if (!parsed) {
-    throw new Error('Unable to parse AI response from OpenAI.');
+    return {
+      disease: parsed.disease || 'Unknown',
+      confidence: typeof parsed.confidence === 'number' ? parsed.confidence : Number(parsed.confidence) || 0,
+      risk: parsed.risk || 'medium',
+      advice: parsed.advice || 'Please consult a local health worker for a more accurate diagnosis.',
+      topPredictions: Array.isArray(parsed.topPredictions) ? parsed.topPredictions : [],
+      explanation: parsed.explanation || ''
+    };
+  } catch (err) {
+    // If OpenAI fails (invalid key, network, etc.), fall back to the local Java predictor
+    console.error('OpenAI call failed, falling back to Java predictor:', err.message || err);
+    return predictSymptomsViaJava(symptoms, customSymptoms);
   }
-
-  return {
-    disease: parsed.disease || 'Unknown',
-    confidence: typeof parsed.confidence === 'number' ? parsed.confidence : Number(parsed.confidence) || 0,
-    risk: parsed.risk || 'medium',
-    advice: parsed.advice || 'Please consult a local health worker for a more accurate diagnosis.',
-    topPredictions: Array.isArray(parsed.topPredictions) ? parsed.topPredictions : [],
-    explanation: parsed.explanation || ''
-  };
 };

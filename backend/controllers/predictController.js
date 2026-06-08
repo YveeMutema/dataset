@@ -12,7 +12,7 @@ exports.handlePrediction = async (req, res) => {
 
     const aiResult = await predictSymptoms(symptoms, customSymptoms);
     const record = await Prediction.create({
-      user: req.user.id,
+      user: req.user?.id || null,
       symptoms: {
         fever: Boolean(symptoms.fever),
         headache: Boolean(symptoms.headache),
